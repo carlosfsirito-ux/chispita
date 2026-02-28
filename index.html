@@ -452,7 +452,7 @@ main{padding-top:62px;}
     <!-- PROFILE -->
     <div class="page" id="page-profile">
       <div class="profile-header">
-        <div class="profile-av-big" id="profileAvBig" onclick="openSettings('editar')">💑</div>
+        <div class="profile-av-big" id="profileAvBig" onclick="openSettings('fotos')">💑</div>
         <div class="profile-name" id="profileName">Tu pareja</div>
         <div class="profile-sub" id="profileSub">Swinger lifestyle</div>
       </div>
@@ -470,6 +470,7 @@ main{padding-top:62px;}
         <div class="stat-box"><div class="stat-num" id="statPasses">0</div><div class="stat-label">Pasados</div></div>
       </div>
       <div class="settings-card">
+        <div class="settings-item" onclick="openSettings('fotos')"><span>📸 Gestionar fotos</span><span class="settings-arrow">›</span></div>
         <div class="settings-item" onclick="openSettings('editar')"><span>✏️ Editar perfil de pareja</span><span class="settings-arrow">›</span></div>
         <div class="settings-item" onclick="openSettings('radio')"><span>📍 Radio de búsqueda</span><span class="settings-arrow">›</span></div>
         <div class="settings-item" onclick="openSettings('notif')"><span>🔔 Notificaciones</span><span class="settings-arrow">›</span></div>
@@ -559,14 +560,6 @@ main{padding-top:62px;}
     <div id="settings-editar" class="settings-panel">
       <div class="modal-icon" style="text-align:center">✏️</div>
       <h3 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:16px;">Editar Perfil</h3>
-
-      <!-- FOTOS -->
-      <div class="section-heading">📸 Fotos de la pareja (máx. 6)</div>
-      <div class="photos-grid" id="photosGrid">
-        <label class="photo-thumb add-btn" title="Añadir foto">
-          ➕<input type="file" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
-        </label>
-      </div>
       <div class="form-group"><label class="form-label">Nombre 1</label><input type="text" class="form-input" id="edit_n1" placeholder="Nombre"></div>
       <div class="form-group"><label class="form-label">Nombre 2</label><input type="text" class="form-input" id="edit_n2" placeholder="Nombre"></div>
       <div class="form-row">
@@ -609,6 +602,26 @@ main{padding-top:62px;}
       </div>
       <div class="error-msg" id="editError"></div>
       <button class="btn-auth" onclick="saveProfile()">💾 Guardar cambios</button>
+    </div>
+
+    <!-- FOTOS -->
+    <div id="settings-fotos" class="settings-panel" style="display:none">
+      <div class="modal-icon" style="text-align:center">📸</div>
+      <h3 style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:8px;">Fotos de la Pareja</h3>
+      <p style="text-align:center;color:var(--muted);font-size:0.78rem;margin-bottom:16px;">Máximo 6 fotos · La primera será vuestra foto principal</p>
+      <div class="photos-grid" id="photosGrid">
+        <label class="photo-thumb add-btn" title="Añadir foto">
+          ➕<input type="file" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
+        </label>
+      </div>
+      <div style="background:rgba(232,82,122,0.08);border:1px solid var(--border);border-radius:12px;padding:12px;font-size:0.78rem;color:var(--muted);margin-bottom:16px;line-height:1.5;">
+        💡 <strong style="color:var(--text)">Consejos:</strong><br>
+        · Usad fotos reales y actuales<br>
+        · La primera foto es la más importante<br>
+        · Fotos juntos generan más matches<br>
+        · Máximo 5MB por foto
+      </div>
+      <button class="btn-auth" onclick="closeSettings()">✅ Listo</button>
     </div>
 
     <!-- RADIO DE BÚSQUEDA -->
@@ -1501,10 +1514,14 @@ function openSettings(panel) {
   document.getElementById('settings-' + panel).style.display = 'block';
   // Open modal
   document.getElementById('settingsModal').classList.add('open');
-  // If editing profile, fill current data and render photos
-  if (panel === 'editar' && currentProfile) {
+  // Photos panel
+  if (panel === 'fotos') {
     renderEditPhotos();
     updateProfileAvatar();
+  }
+
+  // If editing profile, fill current data and render photos
+  if (panel === 'editar' && currentProfile) {
     document.getElementById('edit_n1').value = currentProfile.nombre1 || '';
     document.getElementById('edit_n2').value = currentProfile.nombre2 || '';
     document.getElementById('edit_a1').value = currentProfile.edad1 || '';
